@@ -74,7 +74,7 @@ bool SQLite::createTables()
             "  distance_cm INTEGER,"
             "  bottle_present INTEGER,"
             "  received_at TEXT NOT NULL,"
-            "  UNIQUE(device_id, seq, timestamp)"
+            "  UNIQUE(device_id, seq)"
             ")");
 
     // 执行建表语句
