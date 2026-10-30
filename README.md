@@ -44,10 +44,9 @@
 - 项目使用公共免费MQTT测试Broker（broker.hivemq.com），无硬编码敏感信息
 - 设备端代码为项目实际运行版本，可直接编译烧录
 
- # Qt 服务端
-- 1.用 QtMqtt 接入设备，收到上报的 JSON 先做字段校验，缺 device_id、seq 的非法报文直接丢
-- 2.SQLite 做幂等存储，建表的时候加了设备 ID+seq + 时间戳的联合唯一索引，用参数绑定 + INSERT OR IGNORE 写入，解决 MQTT 重发、Flash 补发带来的重复数据问题
-- 3.做了 TCP 中转层，给 Qt 客户端提供实时数据推送，用 JSON 加换行符分帧解决 TCP 粘包，还做了长度限制防止超长报文打挂服务
-- 4.额外做了个轻量 Web 监控页，浏览器直接打开就能看实时数据，不用装客户端
-- 整个服务端完全解耦：MQTT 收数据、SQLite 存数据、TCP 推数据，模块之间用 Qt 信号槽通信，耦合度很低。
+## Qt服务端实现
+- 基于QtMqtt实现多设备接入，订阅设备遥测主题，JSON字段校验后入库
+- SQLite建表加`device_id+seq+timestamp`联合唯一索引，参数绑定+INSERT OR IGNORE实现幂等写入，解决MQTT重发、Flash补发的重复数据问题
+- 封装TCP中转层，监听6666端口，JSON+换行符分帧解决粘包，推送实时数据到Qt客户端
+- 内嵌轻量Web监控页，浏览器直接访问即可查看实时数据
 
