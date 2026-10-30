@@ -213,7 +213,7 @@ static uint8_t MQTT_ConnectAndSubscribe(void)
         Debug_Print("[ESP TASK] MQTT STATE CHECK FAILED\r\n");
         return 0U;
     }
-    if (!ESP_SendCommand("AT+MQTTSUB=0,\"shengtu/program3/device/stm32_001/command\",1\r\n",
+    if (!ESP_SendCommand("AT+MQTTSUB=0,\"***/program3/device/stm32_001/command\",1\r\n",
                          "OK", 5000U))
     {
         Debug_Print("[ESP TASK] COMMAND SUBSCRIBE FAILED\r\n");
@@ -287,7 +287,7 @@ static uint8_t MQTT_PublishRecord(const StorageRecord_t *record)
     }
 
     (void)snprintf(publishCommand, sizeof(publishCommand),
-        "AT+MQTTPUBRAW=0,\"shengtu/program3/device/stm32_001/telemetry\",%d,1,0\r\n",
+        "AT+MQTTPUBRAW=0,\"***/program3/device/stm32_001/telemetry\",%d,1,0\r\n",
         telemetryLength);
 
     if (ESP_SendCommand(publishCommand, ">", 3000U) == 0U)
@@ -423,7 +423,7 @@ void MqttAt_RunTask(void *argument)
                 }
             }
 
-            if ((mqttReady != 0U) &&(hasSubscription != 0U) &&(ESP_BufferContains(espRxBuffer, espRxLength,"shengtu/program3/device/stm32_001/command") != 0U))
+            if ((mqttReady != 0U) &&(hasSubscription != 0U) &&(ESP_BufferContains(espRxBuffer, espRxLength,"**/program3/device/stm32_001/command") != 0U))
             {
                 DeviceCommand_t command = DEVICE_COMMAND_NONE;
                 uint8_t validCommandEnvelope;
